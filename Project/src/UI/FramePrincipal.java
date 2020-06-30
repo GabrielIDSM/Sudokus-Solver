@@ -1,9 +1,21 @@
 package UI;
 
-public class FramePrincipal extends javax.swing.JFrame {
+import LT.Diagramas;
+import LT.DiagramasCompostos;
+import LT.Validade;
+import UTIL.Mensagens;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
+public class FramePrincipal extends javax.swing.JFrame {
+    //Atributos
+    int[][][][] ArrayInicial = new int[3][3][3][3];
+    //Construtor
     public FramePrincipal() {
         initComponents();
+        MudaEstadoTxtBox(false);
+        btnResolver.setEnabled(false);
+        btnConfirmar.setEnabled(false);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -343,8 +355,6 @@ public class FramePrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sudoku's Solver");
         setBackground(new java.awt.Color(245, 245, 255));
-        setMaximumSize(new java.awt.Dimension(2000, 2000));
-        setPreferredSize(new java.awt.Dimension(840, 494));
         setResizable(false);
 
         pnlFundo.setBackground(new java.awt.Color(245, 245, 255));
@@ -3947,14 +3957,29 @@ public class FramePrincipal extends javax.swing.JFrame {
         btnAlterar.setBackground(new java.awt.Color(153, 153, 255));
         btnAlterar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnConfirmar.setBackground(new java.awt.Color(153, 255, 153));
         btnConfirmar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnConfirmar.setText("Confirmar");
+        btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmarActionPerformed(evt);
+            }
+        });
 
         btnResolver.setBackground(new java.awt.Color(153, 255, 153));
         btnResolver.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnResolver.setText("Resolver");
+        btnResolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlFundoLayout = new javax.swing.GroupLayout(pnlFundo);
         pnlFundo.setLayout(pnlFundoLayout);
@@ -4003,6 +4028,353 @@ public class FramePrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        MudaEstadoTxtBox(true);
+        btnResolver.setEnabled(false);
+        btnAlterar.setEnabled(false);
+        btnConfirmar.setEnabled(true);
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
+        if(DefineArrayInicial()){
+            if(Validade.VerificaSudokuPorLinha(ArrayInicial)){
+                if(Validade.VerificaSudokuPorColuna(ArrayInicial)){
+                    if(Validade.VerificaSudokuPorArea(ArrayInicial)){
+                        if(Validade.VerificaQuantidadeDeCelulasPreenchidas(ArrayInicial) > 17){
+                            MudaEstadoTxtBox(false);
+                            btnResolver.setEnabled(true);
+                            btnAlterar.setEnabled(true);
+                            btnConfirmar.setEnabled(false);
+                        }else{
+                            JOptionPane.showMessageDialog(this, "São necessárias 25 celulas preenchidas, no mínimo", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Números iguais na verificação por área", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(this, "Números iguais na verificação por coluna", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Números iguais na verificação por linha", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Valores inválidos", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnConfirmarActionPerformed
+
+    private void btnResolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResolverActionPerformed
+        btnAlterar.setEnabled(false);
+        ArrayList<ArrayList<int[][]>> SudokuDiagramas = new Diagramas().DeterminaTodosDiagramasPorArea(ArrayInicial, this);
+        int[][][][] SudokuFinal = new DiagramasCompostos().DeterminaDiagramaTresPorTres(SudokuDiagramas);
+        if(SudokuFinal != null) DefineSudokuExibicao(SudokuFinal);
+        else JOptionPane.showMessageDialog(this, "Não foi encontrada uma solução", "Erro", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_btnResolverActionPerformed
+    
+    private void MudaEstadoTxtBox(Boolean b){
+        tbxIn1.setEnabled(b);
+        tbxIn10.setEnabled(b);
+        tbxIn11.setEnabled(b);
+        tbxIn12.setEnabled(b);
+        tbxIn13.setEnabled(b);
+        tbxIn14.setEnabled(b);
+        tbxIn15.setEnabled(b);
+        tbxIn16.setEnabled(b);
+        tbxIn17.setEnabled(b);
+        tbxIn18.setEnabled(b);
+        tbxIn19.setEnabled(b);
+        tbxIn2.setEnabled(b);
+        tbxIn20.setEnabled(b);
+        tbxIn21.setEnabled(b);
+        tbxIn22.setEnabled(b);
+        tbxIn23.setEnabled(b);
+        tbxIn24.setEnabled(b);
+        tbxIn25.setEnabled(b);
+        tbxIn26.setEnabled(b);
+        tbxIn27.setEnabled(b);
+        tbxIn28.setEnabled(b);
+        tbxIn29.setEnabled(b);
+        tbxIn3.setEnabled(b);
+        tbxIn30.setEnabled(b);
+        tbxIn31.setEnabled(b);
+        tbxIn32.setEnabled(b);
+        tbxIn33.setEnabled(b);
+        tbxIn34.setEnabled(b);
+        tbxIn35.setEnabled(b);
+        tbxIn36.setEnabled(b);
+        tbxIn37.setEnabled(b);
+        tbxIn38.setEnabled(b);
+        tbxIn39.setEnabled(b);
+        tbxIn4.setEnabled(b);
+        tbxIn40.setEnabled(b);
+        tbxIn41.setEnabled(b);
+        tbxIn42.setEnabled(b);
+        tbxIn43.setEnabled(b);
+        tbxIn44.setEnabled(b);
+        tbxIn45.setEnabled(b);
+        tbxIn46.setEnabled(b);
+        tbxIn47.setEnabled(b);
+        tbxIn48.setEnabled(b);
+        tbxIn49.setEnabled(b);
+        tbxIn5.setEnabled(b);
+        tbxIn50.setEnabled(b);
+        tbxIn51.setEnabled(b);
+        tbxIn52.setEnabled(b);
+        tbxIn53.setEnabled(b);
+        tbxIn54.setEnabled(b);
+        tbxIn55.setEnabled(b);
+        tbxIn56.setEnabled(b);
+        tbxIn57.setEnabled(b);
+        tbxIn58.setEnabled(b);
+        tbxIn59.setEnabled(b);
+        tbxIn6.setEnabled(b);
+        tbxIn60.setEnabled(b);
+        tbxIn61.setEnabled(b);
+        tbxIn62.setEnabled(b);
+        tbxIn63.setEnabled(b);
+        tbxIn64.setEnabled(b);
+        tbxIn65.setEnabled(b);
+        tbxIn66.setEnabled(b);
+        tbxIn67.setEnabled(b);
+        tbxIn68.setEnabled(b);
+        tbxIn69.setEnabled(b);
+        tbxIn7.setEnabled(b);
+        tbxIn70.setEnabled(b);
+        tbxIn71.setEnabled(b);
+        tbxIn72.setEnabled(b);
+        tbxIn73.setEnabled(b);
+        tbxIn74.setEnabled(b);
+        tbxIn75.setEnabled(b);
+        tbxIn76.setEnabled(b);
+        tbxIn77.setEnabled(b);
+        tbxIn78.setEnabled(b);
+        tbxIn79.setEnabled(b);
+        tbxIn8.setEnabled(b);
+        tbxIn80.setEnabled(b);
+        tbxIn81.setEnabled(b);
+        tbxIn9.setEnabled(b);
+    }
+    
+    private Boolean DefineArrayInicial(){
+        //Reinicia Array
+        ArrayInicial = new int[3][3][3][3];
+        //Area 1
+        ArrayInicial[0][0][0][0] = DefineValorUnitario(tbxIn1.getText());
+        ArrayInicial[0][0][0][1] = DefineValorUnitario(tbxIn2.getText());
+        ArrayInicial[0][0][0][2] = DefineValorUnitario(tbxIn3.getText());
+        ArrayInicial[0][0][1][0] = DefineValorUnitario(tbxIn4.getText());
+        ArrayInicial[0][0][1][1] = DefineValorUnitario(tbxIn5.getText());
+        ArrayInicial[0][0][1][2] = DefineValorUnitario(tbxIn6.getText());
+        ArrayInicial[0][0][2][0] = DefineValorUnitario(tbxIn7.getText());
+        ArrayInicial[0][0][2][1] = DefineValorUnitario(tbxIn8.getText());
+        ArrayInicial[0][0][2][2] = DefineValorUnitario(tbxIn9.getText());
+        //Area 2
+        ArrayInicial[0][1][0][0] = DefineValorUnitario(tbxIn10.getText());
+        ArrayInicial[0][1][0][1] = DefineValorUnitario(tbxIn11.getText());
+        ArrayInicial[0][1][0][2] = DefineValorUnitario(tbxIn12.getText());
+        ArrayInicial[0][1][1][0] = DefineValorUnitario(tbxIn13.getText());
+        ArrayInicial[0][1][1][1] = DefineValorUnitario(tbxIn14.getText());
+        ArrayInicial[0][1][1][2] = DefineValorUnitario(tbxIn15.getText());
+        ArrayInicial[0][1][2][0] = DefineValorUnitario(tbxIn16.getText());
+        ArrayInicial[0][1][2][1] = DefineValorUnitario(tbxIn17.getText());
+        ArrayInicial[0][1][2][2] = DefineValorUnitario(tbxIn18.getText());
+        //Area 3
+        ArrayInicial[0][2][0][0] = DefineValorUnitario(tbxIn19.getText());
+        ArrayInicial[0][2][0][1] = DefineValorUnitario(tbxIn20.getText());
+        ArrayInicial[0][2][0][2] = DefineValorUnitario(tbxIn21.getText());
+        ArrayInicial[0][2][1][0] = DefineValorUnitario(tbxIn22.getText());
+        ArrayInicial[0][2][1][1] = DefineValorUnitario(tbxIn23.getText());
+        ArrayInicial[0][2][1][2] = DefineValorUnitario(tbxIn24.getText());
+        ArrayInicial[0][2][2][0] = DefineValorUnitario(tbxIn25.getText());
+        ArrayInicial[0][2][2][1] = DefineValorUnitario(tbxIn26.getText());
+        ArrayInicial[0][2][2][2] = DefineValorUnitario(tbxIn27.getText());
+        //Area 4
+        ArrayInicial[1][0][0][0] = DefineValorUnitario(tbxIn28.getText());
+        ArrayInicial[1][0][0][1] = DefineValorUnitario(tbxIn29.getText());
+        ArrayInicial[1][0][0][2] = DefineValorUnitario(tbxIn30.getText());
+        ArrayInicial[1][0][1][0] = DefineValorUnitario(tbxIn31.getText());
+        ArrayInicial[1][0][1][1] = DefineValorUnitario(tbxIn32.getText());
+        ArrayInicial[1][0][1][2] = DefineValorUnitario(tbxIn33.getText());
+        ArrayInicial[1][0][2][0] = DefineValorUnitario(tbxIn34.getText());
+        ArrayInicial[1][0][2][1] = DefineValorUnitario(tbxIn35.getText());
+        ArrayInicial[1][0][2][2] = DefineValorUnitario(tbxIn36.getText());
+        //Area 5
+        ArrayInicial[1][1][0][0] = DefineValorUnitario(tbxIn37.getText());
+        ArrayInicial[1][1][0][1] = DefineValorUnitario(tbxIn38.getText());
+        ArrayInicial[1][1][0][2] = DefineValorUnitario(tbxIn39.getText());
+        ArrayInicial[1][1][1][0] = DefineValorUnitario(tbxIn40.getText());
+        ArrayInicial[1][1][1][1] = DefineValorUnitario(tbxIn41.getText());
+        ArrayInicial[1][1][1][2] = DefineValorUnitario(tbxIn42.getText());
+        ArrayInicial[1][1][2][0] = DefineValorUnitario(tbxIn43.getText());
+        ArrayInicial[1][1][2][1] = DefineValorUnitario(tbxIn44.getText());
+        ArrayInicial[1][1][2][2] = DefineValorUnitario(tbxIn45.getText());
+        //Area 6
+        ArrayInicial[1][2][0][0] = DefineValorUnitario(tbxIn46.getText());
+        ArrayInicial[1][2][0][1] = DefineValorUnitario(tbxIn47.getText());
+        ArrayInicial[1][2][0][2] = DefineValorUnitario(tbxIn48.getText());
+        ArrayInicial[1][2][1][0] = DefineValorUnitario(tbxIn49.getText());
+        ArrayInicial[1][2][1][1] = DefineValorUnitario(tbxIn50.getText());
+        ArrayInicial[1][2][1][2] = DefineValorUnitario(tbxIn51.getText());
+        ArrayInicial[1][2][2][0] = DefineValorUnitario(tbxIn52.getText());
+        ArrayInicial[1][2][2][1] = DefineValorUnitario(tbxIn53.getText());
+        ArrayInicial[1][2][2][2] = DefineValorUnitario(tbxIn54.getText());
+        //Area 7
+        ArrayInicial[2][0][0][0] = DefineValorUnitario(tbxIn55.getText());
+        ArrayInicial[2][0][0][1] = DefineValorUnitario(tbxIn56.getText());
+        ArrayInicial[2][0][0][2] = DefineValorUnitario(tbxIn57.getText());
+        ArrayInicial[2][0][1][0] = DefineValorUnitario(tbxIn58.getText());
+        ArrayInicial[2][0][1][1] = DefineValorUnitario(tbxIn59.getText());
+        ArrayInicial[2][0][1][2] = DefineValorUnitario(tbxIn60.getText());
+        ArrayInicial[2][0][2][0] = DefineValorUnitario(tbxIn61.getText());
+        ArrayInicial[2][0][2][1] = DefineValorUnitario(tbxIn62.getText());
+        ArrayInicial[2][0][2][2] = DefineValorUnitario(tbxIn63.getText());
+        //Area 8
+        ArrayInicial[2][1][0][0] = DefineValorUnitario(tbxIn64.getText());
+        ArrayInicial[2][1][0][1] = DefineValorUnitario(tbxIn65.getText());
+        ArrayInicial[2][1][0][2] = DefineValorUnitario(tbxIn66.getText());
+        ArrayInicial[2][1][1][0] = DefineValorUnitario(tbxIn67.getText());
+        ArrayInicial[2][1][1][1] = DefineValorUnitario(tbxIn68.getText());
+        ArrayInicial[2][1][1][2] = DefineValorUnitario(tbxIn69.getText());
+        ArrayInicial[2][1][2][0] = DefineValorUnitario(tbxIn70.getText());
+        ArrayInicial[2][1][2][1] = DefineValorUnitario(tbxIn71.getText());
+        ArrayInicial[2][1][2][2] = DefineValorUnitario(tbxIn72.getText());
+        //Area 9
+        ArrayInicial[2][2][0][0] = DefineValorUnitario(tbxIn73.getText());
+        ArrayInicial[2][2][0][1] = DefineValorUnitario(tbxIn74.getText());
+        ArrayInicial[2][2][0][2] = DefineValorUnitario(tbxIn75.getText());
+        ArrayInicial[2][2][1][0] = DefineValorUnitario(tbxIn76.getText());
+        ArrayInicial[2][2][1][1] = DefineValorUnitario(tbxIn77.getText());
+        ArrayInicial[2][2][1][2] = DefineValorUnitario(tbxIn78.getText());
+        ArrayInicial[2][2][2][0] = DefineValorUnitario(tbxIn79.getText());
+        ArrayInicial[2][2][2][1] = DefineValorUnitario(tbxIn80.getText());
+        ArrayInicial[2][2][2][2] = DefineValorUnitario(tbxIn81.getText());
+        return VerificaArrayInicial();
+    }
+    
+    public void DefineSudokuExibicao(int[][][][] Sudoku){
+        //Area 1
+        lbFnl1.setText(DefineValorUnitario(Sudoku[0][0][0][0]));
+        lbFnl2.setText(DefineValorUnitario(Sudoku[0][0][0][1]));
+        lbFnl3.setText(DefineValorUnitario(Sudoku[0][0][0][2]));
+        lbFnl4.setText(DefineValorUnitario(Sudoku[0][0][1][0]));
+        lbFnl5.setText(DefineValorUnitario(Sudoku[0][0][1][1]));
+        lbFnl6.setText(DefineValorUnitario(Sudoku[0][0][1][2]));
+        lbFnl7.setText(DefineValorUnitario(Sudoku[0][0][2][0]));
+        lbFnl8.setText(DefineValorUnitario(Sudoku[0][0][2][1]));
+        lbFnl9.setText(DefineValorUnitario(Sudoku[0][0][2][2]));
+        //Area 2
+        lbFnl10.setText(DefineValorUnitario(Sudoku[0][1][0][0]));
+        lbFnl11.setText(DefineValorUnitario(Sudoku[0][1][0][1]));
+        lbFnl12.setText(DefineValorUnitario(Sudoku[0][1][0][2]));
+        lbFnl13.setText(DefineValorUnitario(Sudoku[0][1][1][0]));
+        lbFnl14.setText(DefineValorUnitario(Sudoku[0][1][1][1]));
+        lbFnl15.setText(DefineValorUnitario(Sudoku[0][1][1][2]));
+        lbFnl16.setText(DefineValorUnitario(Sudoku[0][1][2][0]));
+        lbFnl17.setText(DefineValorUnitario(Sudoku[0][1][2][1]));
+        lbFnl18.setText(DefineValorUnitario(Sudoku[0][1][2][2]));
+        //Area 3
+        lbFnl19.setText(DefineValorUnitario(Sudoku[0][2][0][0]));
+        lbFnl20.setText(DefineValorUnitario(Sudoku[0][2][0][1]));
+        lbFnl21.setText(DefineValorUnitario(Sudoku[0][2][0][2]));
+        lbFnl22.setText(DefineValorUnitario(Sudoku[0][2][1][0]));
+        lbFnl23.setText(DefineValorUnitario(Sudoku[0][2][1][1]));
+        lbFnl24.setText(DefineValorUnitario(Sudoku[0][2][1][2]));
+        lbFnl25.setText(DefineValorUnitario(Sudoku[0][2][2][0]));
+        lbFnl26.setText(DefineValorUnitario(Sudoku[0][2][2][1]));
+        lbFnl27.setText(DefineValorUnitario(Sudoku[0][2][2][2]));
+        //Area 4
+        lbFnl28.setText(DefineValorUnitario(Sudoku[1][0][0][0]));
+        lbFnl29.setText(DefineValorUnitario(Sudoku[1][0][0][1]));
+        lbFnl30.setText(DefineValorUnitario(Sudoku[1][0][0][2]));
+        lbFnl31.setText(DefineValorUnitario(Sudoku[1][0][1][0]));
+        lbFnl32.setText(DefineValorUnitario(Sudoku[1][0][1][1]));
+        lbFnl33.setText(DefineValorUnitario(Sudoku[1][0][1][2]));
+        lbFnl34.setText(DefineValorUnitario(Sudoku[1][0][2][0]));
+        lbFnl35.setText(DefineValorUnitario(Sudoku[1][0][2][1]));
+        lbFnl36.setText(DefineValorUnitario(Sudoku[1][0][2][2]));
+        //Area 5
+        lbFnl37.setText(DefineValorUnitario(Sudoku[1][1][0][0]));
+        lbFnl38.setText(DefineValorUnitario(Sudoku[1][1][0][1]));
+        lbFnl39.setText(DefineValorUnitario(Sudoku[1][1][0][2]));
+        lbFnl40.setText(DefineValorUnitario(Sudoku[1][1][1][0]));
+        lbFnl41.setText(DefineValorUnitario(Sudoku[1][1][1][1]));
+        lbFnl42.setText(DefineValorUnitario(Sudoku[1][1][1][2]));
+        lbFnl43.setText(DefineValorUnitario(Sudoku[1][1][2][0]));
+        lbFnl44.setText(DefineValorUnitario(Sudoku[1][1][2][1]));
+        lbFnl45.setText(DefineValorUnitario(Sudoku[1][1][2][2]));
+        //Area 6
+        lbFnl46.setText(DefineValorUnitario(Sudoku[1][2][0][0]));
+        lbFnl47.setText(DefineValorUnitario(Sudoku[1][2][0][1]));
+        lbFnl48.setText(DefineValorUnitario(Sudoku[1][2][0][2]));
+        lbFnl49.setText(DefineValorUnitario(Sudoku[1][2][1][0]));
+        lbFnl50.setText(DefineValorUnitario(Sudoku[1][2][1][1]));
+        lbFnl51.setText(DefineValorUnitario(Sudoku[1][2][1][2]));
+        lbFnl52.setText(DefineValorUnitario(Sudoku[1][2][2][0]));
+        lbFnl53.setText(DefineValorUnitario(Sudoku[1][2][2][1]));
+        lbFnl54.setText(DefineValorUnitario(Sudoku[1][2][2][2]));
+        //Area 7
+        lbFnl55.setText(DefineValorUnitario(Sudoku[2][0][0][0]));
+        lbFnl56.setText(DefineValorUnitario(Sudoku[2][0][0][1]));
+        lbFnl57.setText(DefineValorUnitario(Sudoku[2][0][0][2]));
+        lbFnl58.setText(DefineValorUnitario(Sudoku[2][0][1][0]));
+        lbFnl59.setText(DefineValorUnitario(Sudoku[2][0][1][1]));
+        lbFnl60.setText(DefineValorUnitario(Sudoku[2][0][1][2]));
+        lbFnl61.setText(DefineValorUnitario(Sudoku[2][0][2][0]));
+        lbFnl62.setText(DefineValorUnitario(Sudoku[2][0][2][1]));
+        lbFnl63.setText(DefineValorUnitario(Sudoku[2][0][2][2]));
+        //Area 8
+        lbFnl64.setText(DefineValorUnitario(Sudoku[2][1][0][0]));
+        lbFnl65.setText(DefineValorUnitario(Sudoku[2][1][0][1]));
+        lbFnl66.setText(DefineValorUnitario(Sudoku[2][1][0][2]));
+        lbFnl67.setText(DefineValorUnitario(Sudoku[2][1][1][0]));
+        lbFnl68.setText(DefineValorUnitario(Sudoku[2][1][1][1]));
+        lbFnl69.setText(DefineValorUnitario(Sudoku[2][1][1][2]));
+        lbFnl70.setText(DefineValorUnitario(Sudoku[2][1][2][0]));
+        lbFnl71.setText(DefineValorUnitario(Sudoku[2][1][2][1]));
+        lbFnl72.setText(DefineValorUnitario(Sudoku[2][1][2][2]));
+        //Area 9
+        lbFnl73.setText(DefineValorUnitario(Sudoku[2][2][0][0]));
+        lbFnl74.setText(DefineValorUnitario(Sudoku[2][2][0][1]));
+        lbFnl75.setText(DefineValorUnitario(Sudoku[2][2][0][2]));
+        lbFnl76.setText(DefineValorUnitario(Sudoku[2][2][1][0]));
+        lbFnl77.setText(DefineValorUnitario(Sudoku[2][2][1][1]));
+        lbFnl78.setText(DefineValorUnitario(Sudoku[2][2][1][2]));
+        lbFnl79.setText(DefineValorUnitario(Sudoku[2][2][2][0]));
+        lbFnl80.setText(DefineValorUnitario(Sudoku[2][2][2][1]));
+        lbFnl81.setText(DefineValorUnitario(Sudoku[2][2][2][2]));
+    }
+    
+    private int DefineValorUnitario(String s){
+        int result;
+        if(s.equalsIgnoreCase("")) return 0;
+        try{
+            result = Integer.parseInt(s);
+        }catch(NumberFormatException e){
+            result = -1;
+        }
+        if(result < 1 || result > 9) return -1;
+        return result;
+    }
+    
+    private String DefineValorUnitario(Integer i){
+        if(i == 0) return "";
+        return i.toString();
+    }
+    
+    private boolean VerificaArrayInicial(){
+        if(this.ArrayInicial != null){
+            for(int i = 0; i < 3; i++){
+                for(int j = 0; j < 3; j++){
+                    for(int l = 0; l < 3; l++){
+                        for(int m = 0; m < 3; m++){
+                            if(ArrayInicial[i][j][l][m] == -1) return false;
+                        }
+                    }
+                }
+            }
+        }
+        if(this.ArrayInicial == null) return false;
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
@@ -4089,7 +4461,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lbFnl80;
     private javax.swing.JLabel lbFnl81;
     private javax.swing.JLabel lbFnl9;
-    private javax.swing.JPanel pnlFundo;
+    public javax.swing.JPanel pnlFundo;
     private javax.swing.JPanel pnlIn213;
     private javax.swing.JPanel pnlIn214;
     private javax.swing.JPanel pnlIn221;
