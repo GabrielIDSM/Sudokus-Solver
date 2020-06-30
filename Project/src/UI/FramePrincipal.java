@@ -355,8 +355,8 @@ public class FramePrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sudoku's Solver");
         setBackground(new java.awt.Color(245, 245, 255));
-        setMinimumSize(new java.awt.Dimension(840, 495));
-        setPreferredSize(new java.awt.Dimension(840, 495));
+        setMinimumSize(new java.awt.Dimension(850, 505));
+        setPreferredSize(new java.awt.Dimension(850, 505));
         setResizable(false);
 
         pnlFundo.setBackground(new java.awt.Color(245, 245, 255));
