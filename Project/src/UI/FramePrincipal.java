@@ -4046,7 +4046,7 @@ public class FramePrincipal extends javax.swing.JFrame {
             if(Validade.VerificaSudokuPorLinha(ArrayInicial)){
                 if(Validade.VerificaSudokuPorColuna(ArrayInicial)){
                     if(Validade.VerificaSudokuPorArea(ArrayInicial)){
-                        if(Validade.VerificaQuantidadeDeCelulasPreenchidas(ArrayInicial) > 17){
+                        if(Validade.VerificaQuantidadeDeCelulasPreenchidas(ArrayInicial) > 25){
                             MudaEstadoTxtBox(false);
                             btnResolver.setEnabled(true);
                             btnAlterar.setEnabled(true);
@@ -4070,10 +4070,12 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private void btnResolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResolverActionPerformed
         btnAlterar.setEnabled(false);
+        btnResolver.setEnabled(false);
         ArrayList<ArrayList<int[][]>> SudokuDiagramas = new Diagramas().DeterminaTodosDiagramasPorArea(ArrayInicial, this);
         int[][][][] SudokuFinal = new DiagramasCompostos().DeterminaDiagramaTresPorTres(SudokuDiagramas);
         if(SudokuFinal != null) DefineSudokuExibicao(SudokuFinal);
         else JOptionPane.showMessageDialog(this, "Não foi encontrada uma solução", "Erro", JOptionPane.ERROR_MESSAGE);
+        btnAlterar.setEnabled(true);
     }//GEN-LAST:event_btnResolverActionPerformed
     
     private void MudaEstadoTxtBox(Boolean b){
